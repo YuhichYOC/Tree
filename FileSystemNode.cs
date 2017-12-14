@@ -19,13 +19,12 @@
 *
 */
 using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace Tree
-{
-    public class FileSystemNode : TreeViewItem
-    {
+namespace Tree {
+    public class FileSystemNode : TreeViewItem {
         #region -- Fields --
 
         private string name;
@@ -36,24 +35,20 @@ namespace Tree
 
         #region -- Getter, Setter --
 
-        public void SetName(string arg)
-        {
+        public void SetName(string arg) {
             Header = arg;
             name = arg;
         }
 
-        public string GetName()
-        {
+        public string GetName() {
             return name;
         }
 
-        public void SetPath(string arg)
-        {
+        public void SetPath(string arg) {
             path = arg;
         }
 
-        public string GetPath()
-        {
+        public string GetPath() {
             return path;
         }
 
@@ -61,23 +56,19 @@ namespace Tree
 
         #region -- Constructor --
 
-        public FileSystemNode()
-        {
+        public FileSystemNode() {
         }
 
         #endregion -- Constructor --
 
         #region -- Events --
 
-        private void OnExpand(object sender, RoutedEventArgs e)
-        {
-            try
-            {
+        private void OnExpand(object sender, RoutedEventArgs e) {
+            try {
                 FileSystemNode senderObj = sender as FileSystemNode;
                 AppendTree(senderObj);
             }
-            catch (Exception ex)
-            {
+            catch (Exception ex) {
                 Console.WriteLine(ex.Message + "\r\n" + ex.StackTrace);
             }
         }
@@ -86,47 +77,38 @@ namespace Tree
 
         #region -- Public --
 
-        public void Tree()
-        {
-            System.Collections.Generic.IEnumerable<string> subDir = TryGetDirectories(path);
+        public void Tree() {
+            IEnumerable<string> subDir = TryGetDirectories(path);
             if (subDir == null)
                 return;
-            foreach (string d in subDir)
-            {
+            foreach (string d in subDir) {
                 AddChild(System.IO.Path.GetFileName(d), d);
                 Tree(Find(d), d);
             }
         }
 
-        public void AppendTree(FileSystemNode arg)
-        {
-            System.Collections.Generic.IEnumerable<string> subDir = TryGetDirectories(arg.GetPath());
+        public void AppendTree(FileSystemNode arg) {
+            IEnumerable<string> subDir = TryGetDirectories(arg.GetPath());
             if (subDir == null)
                 return;
-            foreach (string d in subDir)
-            {
+            foreach (string d in subDir) {
                 FileSystemNode child = Find(arg, d);
-                if (child != null)
-                {
+                if (child != null) {
                     AppendTree(child, d);
                 }
             }
         }
 
-        public bool ChildExists(string otherPath)
-        {
-            foreach (FileSystemNode child in Items)
-            {
-                if (child.Equals(otherPath))
-                {
+        public bool ChildExists(string otherPath) {
+            foreach (FileSystemNode child in Items) {
+                if (child.Equals(otherPath)) {
                     return true;
                 }
             }
             return false;
         }
 
-        public void AddChild(string newName, string newPath)
-        {
+        public void AddChild(string newName, string newPath) {
             FileSystemNode add = new FileSystemNode();
             add.SetName(newName);
             add.SetPath(newPath);
@@ -134,14 +116,11 @@ namespace Tree
             Items.Add(add);
         }
 
-        public bool Equals(string otherPath)
-        {
-            if (path.Equals(otherPath))
-            {
+        public bool Equals(string otherPath) {
+            if (path.Equals(otherPath)) {
                 return true;
             }
-            else
-            {
+            else {
                 return false;
             }
         }
@@ -150,61 +129,47 @@ namespace Tree
 
         #region -- Private --
 
-        private void Tree(FileSystemNode arg, string path)
-        {
-            System.Collections.Generic.IEnumerable<string> subDir = TryGetDirectories(path);
+        private void Tree(FileSystemNode arg, string path) {
+            IEnumerable<string> subDir = TryGetDirectories(path);
             if (subDir == null)
                 return;
-            foreach (string d in subDir)
-            {
+            foreach (string d in subDir) {
                 arg.AddChild(System.IO.Path.GetFileName(d), d);
             }
         }
 
-        private void AppendTree(FileSystemNode arg, string path)
-        {
-            System.Collections.Generic.IEnumerable<string> subDir = TryGetDirectories(path);
+        private void AppendTree(FileSystemNode arg, string path) {
+            IEnumerable<string> subDir = TryGetDirectories(path);
             if (subDir == null)
                 return;
-            foreach (string d in subDir)
-            {
-                if (!arg.ChildExists(d))
-                {
+            foreach (string d in subDir) {
+                if (!arg.ChildExists(d)) {
                     arg.AddChild(System.IO.Path.GetFileName(d), d);
                 }
             }
         }
 
-        private System.Collections.Generic.IEnumerable<string> TryGetDirectories(string path)
-        {
-            try
-            {
+        private IEnumerable<string> TryGetDirectories(string path) {
+            try {
                 return System.IO.Directory.EnumerateDirectories(path);
             }
-            catch (UnauthorizedAccessException)
-            {
+            catch (UnauthorizedAccessException) {
                 return null;
             }
         }
 
-        private FileSystemNode Find(string otherPath)
-        {
-            foreach (FileSystemNode child in Items)
-            {
-                if (child.Equals(otherPath))
-                {
+        private FileSystemNode Find(string otherPath) {
+            foreach (FileSystemNode child in Items) {
+                if (child.Equals(otherPath)) {
                     return child;
                 }
             }
             return null;
         }
 
-        private FileSystemNode Find(FileSystemNode arg, string otherPath)
-        {
-            foreach (FileSystemNode child in arg.Items)
-            {
-                if (child.Equals(otherPath))
-                {
+        private FileSystemNode Find(FileSystemNode arg, string otherPath) {
+            foreach (FileSystemNode child in arg.Items) {
+                if (child.Equals(otherPath)) {
                     return child;
                 }
             }
