@@ -20,10 +20,8 @@
 */
 using System.Windows.Controls;
 
-namespace Tree
-{
-    public class FileSystemTree
-    {
+namespace Tree {
+    public class FileSystemTree {
         #region  -- Fields --
 
         private TreeView tree;
@@ -34,8 +32,7 @@ namespace Tree
 
         #region -- Getter, Setter --
 
-        public TreeView GetTree()
-        {
+        public TreeView GetTree() {
             return tree;
         }
 
@@ -43,21 +40,18 @@ namespace Tree
 
         #region -- Constructor --
 
-        public FileSystemTree()
-        {
+        public FileSystemTree() {
         }
 
         #endregion -- Constructor --
 
         #region -- Public --
 
-        public void Prepare(TreeView arg)
-        {
+        public void Prepare(TreeView arg) {
             tree = arg;
         }
 
-        public void Tree(string path)
-        {
+        public void Tree(string path) {
             root = new FileSystemNode();
             root.SetName(path);
             root.SetPath(path);
